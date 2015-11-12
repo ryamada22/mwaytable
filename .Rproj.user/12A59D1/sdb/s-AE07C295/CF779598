@@ -1,0 +1,16 @@
+{
+    "contents" : "\\name{mwaytable-package}\n\\alias{mwaytable-package}\n\\alias{mwaytable}\n\\docType{package}\n\\title{\nWhat the package does (short line)\nProbability density of maximum statistic among multiple df=1 statistics on multi-way tables\n}\n\\description{\nMore about what it does (maybe more than one line)\n~~ A concise (1-5 lines) description of the package ~~\n}\n\\details{\n\\tabular{ll}{\nPackage: \\tab mwaytable\\cr\nType: \\tab Package\\cr\nVersion: \\tab 1.0\\cr\nDate: \\tab 2014-05-27\\cr\nLicense: \\tab What license is it under?\\cr\n}\n~~ An overview of how to use the package, including the most important functions ~~\n}\n\\author{\nWho wrote it\n\nMaintainer: Who to complain to <yourfault@somewhere.net>\n~~ The author and/or maintainer of the package ~~\n}\n\\references{\n~~ Literature or other references for background information ~~\n}\n~~ Optionally other standard keywords, one per line, from file KEYWORDS in the R documentation ~~\n~~ directory ~~\n\\keyword{ package }\n\\seealso{\n~~ Optional links to other man pages, e.g. ~~\n~~ \\code{\\link[<pkg>:<pkg>-package]{<pkg>}} ~~\n}\n\\examples{\nA <- matrix(c(10,20,30,40,50,60),2,3)\nt1 <- t2 <- t3 <- matrix(c(1,0,0,0,0,0),byrow=TRUE,2,3)\nt2[1,2] <- 0.5\nt3[1,2] <- 1\ntests <- list(t1,t2,t3)\nn <- 1000\nmway.test(A,tests,n=10000)\n}\n",
+    "created" : 1401149557683.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2382297158",
+    "id" : "CF779598",
+    "lastKnownWriteTime" : 1401149624,
+    "path" : "C:/Users/ryamada/Desktop/mwaytableFinal2/mwaytable/man/mwaytable-package.Rd",
+    "project_path" : "man/mwaytable-package.Rd",
+    "properties" : {
+    },
+    "source_on_save" : false,
+    "type" : "r_doc"
+}
