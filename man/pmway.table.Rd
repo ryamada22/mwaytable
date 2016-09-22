@@ -43,6 +43,5 @@ tests <- list(t1,t2,t3)
 n <- 1000
 x <- 0:10
 pmway.table(x,A,tests)
-
 }
 

@@ -37,6 +37,5 @@ A <- matrix(c(10,20,30,40,50,60),2,3)
 n <- 1000
 rmway.tables.null <- rmway.table(n,A)
 rmway.tables.alt <- rmway.table(n,A,nc=TRUE)
-
 }
 

@@ -23,6 +23,5 @@ Power calculator with intersect information rather than alternative hypothesis t
 }
 \examples{
 # Utility function for the authors
-
 }
 

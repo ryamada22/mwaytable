@@ -11,6 +11,7 @@
 #' r <- c(2,3,4)
 #' A <- array(1:prod(r),r)
 #' calc.marg(A)
+#' @export
 calc.marg <- function(A){
   d <- dim(A)
   ret <- list()
@@ -28,6 +29,7 @@ calc.marg <- function(A){
 #' r <- c(2,3,4)
 #' A <- array(1:prod(r),r)
 #' make.exp.table(A)
+#' @export
 make.exp.table <- function(A){
   n <- sum(A)
   marg <- calc.marg(A)
@@ -46,6 +48,7 @@ make.exp.table <- function(A){
 #' r <- c(2,3,4)
 #' A <- array(1:prod(r),r)
 #' make.diff.table(A)
+#' @export
 make.diff.table <- function(A){
   E <- make.exp.table(A)
   array(c(A)-c(E),dim(A))
@@ -59,6 +62,7 @@ make.diff.table <- function(A){
 #' r <- c(2,3,4)
 #' A <- array(1:prod(r),r)
 #' calc.chisq(A)
+#' @export
 calc.chisq <- function(A){
   E <- make.exp.table(A)
   D <- make.diff.table(A)
@@ -77,6 +81,7 @@ calc.chisq <- function(A){
 #' print(cv)
 #' apply(cv^2,1,sum)
 #' cv %*% t(cv) 
+#' @export
 CategoryVector<-function(d){
   df <- d - 1
   diagval <- 1:d
@@ -99,6 +104,7 @@ CategoryVector<-function(d){
 #' k <- 3
 #' M <- make.simplex.0(k)
 #' M %*% diag(rep(1,k))
+#' @export
 make.simplex.0 <- function(k){
   cv <- CategoryVector(k)
   rbind(t(cv*sqrt(1-1/k)),rep(1/sqrt(k),k))
@@ -112,6 +118,7 @@ make.simplex.0 <- function(k){
 #' k <- 3
 #' M <- make.simplex(k)
 #' M %*% diag(rep(1,k))
+#' @export
 make.simplex <- function(k){
   ret <- matrix(0,k,k)
   for(i in 1:(k-1)){
@@ -137,6 +144,7 @@ make.simplex <- function(k){
 #' r <- c(2,3,4)
 #' KM <- make.simplex.multi(r)
 #' dim(KM)
+#' @export
 make.simplex.multi <- function(r){
   X <- make.simplex(r[1])
   k <- length(r)
@@ -156,7 +164,7 @@ make.simplex.multi <- function(r){
 #' @examples
 #' r <- c(2,3,4)
 #' v0 <- make.vector0(r)
-
+#' @export
 make.vector0 <- function(r){
   tmp <- list()
   for(i in 1:length(r)){
@@ -184,6 +192,7 @@ make.vector0 <- function(r){
 #' r <- c(2,3,4)
 #' mXv <- make.X.vector0(r)
 #' mXv$X %*% mXv$X.inv
+#' @export
 make.X.vector0 <- function(r){
   X <- make.simplex.multi(r)
   #X.inv <- solve(X)
@@ -203,6 +212,7 @@ make.X.vector0 <- function(r){
 #' A <- array(1:prod(r),r)
 #' M <- map2df(A)
 #' M %*% c(A)
+#' @export
 map2df <- function(A){
   r <- dim(A)
   out <- make.X.vector0(r)
@@ -223,6 +233,7 @@ map2df <- function(A){
 #' M <- map2df(A)
 #' M.inv <- map2full(A)
 #' M.inv %*% (M %*% c(A))
+#' @export
 map2full <- function(A){
   r <- dim(A)
   out <- make.X.vector0(r)
@@ -243,6 +254,7 @@ map2full <- function(A){
 #' A <- array(1:prod(r),r)
 #' M <- map2dfdir(A)
 #' c(A) %*% M
+#' @export
 map2dfdir <- function(A){
   r <- dim(A)
   out <- make.X.vector0(r)
@@ -265,7 +277,7 @@ map2dfdir <- function(A){
 #' r <- c(2,3,4)
 #' A <- array(1:prod(r),r)
 #' map.matrix(A)
-
+#' @export
 map.matrix <- function(A){
   r <- dim(A)
   out <- make.X.vector0(r)
@@ -291,6 +303,7 @@ map.matrix <- function(A){
 #' n <- 100
 #' df <- 2
 #' plot(st.mvn(n,df))
+#' @export
 st.mvn <- function(n,df){
   R <- matrix(rnorm(n*df),ncol=df)
   L <- sqrt(apply(R^2,1,sum))
@@ -306,7 +319,7 @@ st.mvn <- function(n,df){
 #' @examples
 #' s <- matrix(c(0,4,1,6,2,3),byrow=TRUE,ncol=2)
 #' segment.union(s)
-
+#' @export
 segment.union <- function(s){
   n.seg <- length(s[,1])
   my.seg.1 <- t(apply(s,1,sort))
@@ -349,6 +362,7 @@ segment.union <- function(s){
 #' @examples
 #' s <- matrix(c(0,4,1,6,2,3),byrow=TRUE,ncol=2)
 #' segment.overlap(s)
+#' @export
 segment.overlap <- function(s){
   n.seg <- length(s[,1])
   my.seg <- t(apply(s,1,sort))
@@ -370,6 +384,7 @@ segment.overlap <- function(s){
 #' @examples
 #' as <- seq(from=-5,to=5,length=101)
 #' plot(pchisq.bid(as,1))
+#' @export
 pchisq.bid <- function(a,df){
   tmp <- as.numeric(a>0) - sign(a)*pchisq(a^2,df,lower.tail = FALSE)/2
   tmp[which(a==0)] <- 0.5
@@ -407,6 +422,7 @@ pchisq.bid <- function(a,df){
 #' r <- c(2,3,4)
 #' A <- array(1:prod(r),r)
 #' t.sphere <- table.sphere(A)
+#' @export
 table.sphere <- function(A){
   n <- sum(A) # sample size
   mg.cnt <- calc.marg(A) # marginal counts
@@ -461,6 +477,7 @@ table.sphere <- function(A){
 #' n <- 1000
 #' K <- 10
 #' make.alternative.table(t.sphere,test.table,odds.ratio.table,or,n,k)
+#' @export
 make.alternative.table <- function(t.sphere,test.table,odds.ratio.table,or,n,K){
   # Default values
   if(missing(n))n<-1000
@@ -521,7 +538,7 @@ make.alternative.table <- function(t.sphere,test.table,odds.ratio.table,or,n,K){
 #' t3[1,2] <- 1
 #' tests <- list(t1,t2,t3)
 #' make.test.vecs(t.sphere,tests)
-
+#' @export
 make.test.vecs <- function(t.sphere,tests){
   n.test <- length(tests)
   test.vecs <- matrix(0,n.test,t.sphere$df)
@@ -547,6 +564,7 @@ make.test.vecs <- function(t.sphere,tests){
 #' tests <- list(t1,t2,t3)
 #' test.vecs <- make.test.vecs(t.sphere,tests)
 #' runitstat(test.vecs)
+#' @export
 runitstat <- function(test.vecs,rmvn,n){
   # Default values
   if(missing(n))n <- 1000
@@ -577,6 +595,7 @@ runitstat <- function(test.vecs,rmvn,n){
 #' tests <- list(t1,t2,t3)
 #' test.vecs <- make.test.vecs(t.sphere,tests)
 #' alt.intersect(alt.out,test.vecs)
+#' @export
 alt.intersect <- function(alt.tables,test.vecs){
   c(test.vecs %*% matrix(alt.tables$alt.vec,ncol=1))
 }
@@ -593,6 +612,7 @@ alt.intersect <- function(alt.tables,test.vecs){
 #' @return A list. k.per.a is 3-way array and is one set of terms to calculate K statistics, which is variable respect to unit vectors. b.per.a is another set of terms which K values for the alternative hypothesis itself
 #' @examples
 #' # utility function being used in other functions
+#' @export
 window.ab <- function(as,ks,bs){
   zero.a <- which(as==0)
   as[zero.a] <- max(abs(as))*2
@@ -616,6 +636,7 @@ window.ab <- function(as,ks,bs){
 #' @return A list segments is a matrix with two rows, 1st column of which is the start and 2nd is the end of segments; ids is a vector indicating random unit vector ids to which segments belong 
 #' @examples
 #' # utility function being used in other functions
+#' @export
 window.select <- function(window.ab.out,one.side){
   if(missing(one.side))one.side <- FALSE
   dm <- dim(window.ab.out$k.per.a)
@@ -658,6 +679,7 @@ window.select <- function(window.ab.out,one.side){
 #' @return Probability estimated
 #' @examples
 #' # utility function being used in other functions
+#' @export
 calc.pr <- function(segs.out,n,df,one.side){
   if(missing(one.side))one.side <- FALSE
   ret <- rep(0,length(segs.out))
@@ -698,6 +720,7 @@ calc.pr <- function(segs.out,n,df,one.side){
 #' alpha <- 0.05
 #' n <- 1000
 #' power.mway.table(A,tests,alpha,n)
+#' @export
 power.mway.table <- function(A,tests,alpha,n){
   if(missing(alpha))alpha <- 0.05
   if(missing(n))n<-1000
@@ -737,7 +760,7 @@ power.mway.table <- function(A,tests,alpha,n){
 #' x <- 8
 #' alpha <- 0.05
 #' power.mway(x,rmway.out,alpha)
-
+#' @export
 power.mway <- function(x,rmway.out,alpha){
   if(missing(alpha))alpha <- 0.05
   null.p <- pmway(x,rmway.out,lower.tail=TRUE)
@@ -758,7 +781,7 @@ power.mway <- function(x,rmway.out,alpha){
 #' @return Power
 #' @examples
 #' # Utility function for the authors
-#' 
+#' @export
 pmway.intersect <- function(x,rmway.out,intersect,lower.tail){
   if(missing(lower.tail))lower.tail <- TRUE
   w.ab.1 <- window.ab(rmway.out$runitstat.out,x,intersect)
@@ -788,7 +811,7 @@ pmway.intersect <- function(x,rmway.out,intersect,lower.tail){
 #' }
 #' @examples
 #' # Utility function for the authors
-#'
+#' @export
 model.table.series <- function(t.sphere,tests,test.table,odds.ratio.table,ks){
   if(missing(ks))ks <- seq(from=0,to=20,by=1)
   n.k <- length(ks)
@@ -846,7 +869,7 @@ model.table.series <- function(t.sphere,tests,test.table,odds.ratio.table,ks){
 #' n <- 1000
 #' rmway.tables.null <- rmway.table(n,A)
 #' rmway.tables.alt <- rmway.table(n,A,nc=TRUE)
-#'
+#' @export
 rmway.table <- function(n,A,tests,nc,one.side){
   t.sphere <- table.sphere(A)
   if(missing(tests))tests <- NULL
@@ -912,7 +935,7 @@ rmway.table <- function(n,A,tests,nc,one.side){
 #' n <- 1000
 #' x <- 0:10
 #' pmway.table(x,A,tests)
-#'
+#' @export
 pmway.table <- function(x,A,tests,lower.tail,nc,one.side,n){
   if(missing(lower.tail))lower.tail <- TRUE
   if(missing(nc))nc <- FALSE
@@ -984,6 +1007,7 @@ pmway.table <- function(x,A,tests,lower.tail,nc,one.side,n){
 #' n <- 1000
 #' x <- 0:10
 #' pmway.table.null(x,A,tests)
+#' @export
 pmway.table.null <- function(x,A,tests,lower.tail,one.side,n){
   if(missing(lower.tail))lower.tail <- TRUE
   if(missing(one.side))one.side <- FALSE
@@ -1028,6 +1052,7 @@ pmway.table.null <- function(x,A,tests,lower.tail,one.side,n){
 #' @return two quantile values and two corresponding p values between which p and its quantile exist
 #' @examples
 #' # Utility function
+#' @export
 qmway.table.pre <- function(p,A,tests,lower.tail,x,nc,one.side,n){
   if(missing(lower.tail))lower.tail <- TRUE
   if(missing(x))x <- seq(from=0,to=100,by=10)
@@ -1078,7 +1103,7 @@ qmway.table.pre <- function(p,A,tests,lower.tail,x,nc,one.side,n){
 #' n <- 1000
 #' p <- 0.05
 #' qmway.table(p,A,tests)
-#'
+#' @export
 qmway.table <- function(p,A,tests,lower.tail,x,nc,one.side,n){
   if(missing(lower.tail))lower.tail <- TRUE
   if(missing(x))x <- seq(from=0,to=100,by=10)
@@ -1114,6 +1139,7 @@ qmway.table <- function(p,A,tests,lower.tail,x,nc,one.side,n){
 #' tests <- list(t1,t2,t3)
 #' n <- 1000
 #' mway.test(A,tests,n=10000)
+#' @export
 mway.test <- function(A,tests,lower.tail,one.side,n){
   if(missing(lower.tail))lower.tail <- FALSE
   if(missing(one.side))one.side <- one.side <- FALSE
@@ -1136,6 +1162,7 @@ mway.test <- function(A,tests,lower.tail,one.side,n){
 #' @examples
 #' m <- matrix(c(10,20,30,40,50,60),2,3)
 #' make.data.from.table(m)
+#' @export
 make.data.from.table <- function(m){
   r <- dim(m)
   address <- which(m <= Inf,arr.ind=TRUE)
@@ -1155,6 +1182,7 @@ make.data.from.table <- function(m){
 #' m <- matrix(c(10,20,30,40,50,60),2,3)
 #' d <- make.data.from.table(m)
 #' make.table.from.data(d)
+#' @export
 make.table.from.data <- function(d){
   rg <- apply(d,2,max)
   ret <- array(rep(0,prod(rg)),rg)
@@ -1175,6 +1203,7 @@ make.table.from.data <- function(d){
 #' m <- matrix(c(10,20,30,40,50,60),2,3)
 #' d <- make.data.from.table(m)
 #' make.table.from.data(d)
+#' @export
 perm.data <- function(data,v){
   if(missing(v))v <- rep(1,length(data[1,]))
   ret <- data
@@ -1200,6 +1229,7 @@ perm.data <- function(data,v){
 #' @return probability
 #' @examples
 #' # Utility function
+#' @export
 pmway <- function(x,rmway.out,alt.intersect,lower.tail){
   if(missing(alt.intersect))alt.intersect <- FALSE
   if(missing(lower.tail))lower.tail <- TRUE
@@ -1253,6 +1283,7 @@ pmway <- function(x,rmway.out,alt.intersect,lower.tail){
 #' odds.ratio.table <- matrix(c(1,0,2,3,0,4),byrow=TRUE,2,3)
 #' or <- 2
 #' rmway.alt.only(test.table,odds.ratio.table,or,rmway.out)
+#' @export
 rmway.alt.only <- function(alt.hx,odds.ratio.table,or,rmway.out,n.alt,K.alt){
   if(missing(n.alt))n.alt <- 1000
   if(missing(K.alt))K.alt <- 10
@@ -1301,6 +1332,7 @@ rmway.alt.only <- function(alt.hx,odds.ratio.table,or,rmway.out,n.alt,K.alt){
 #' tests <- list(t1,t2,t3)
 #' n <- 1000
 #' rmway.out <- rmway(n,A,tests)
+#' @export
 rmway <- function(n,A,tests,alt.hx,odds.ratio.table,or,n.alt,K.alt){
   
   t.sphere <- table.sphere(A)
@@ -1350,7 +1382,7 @@ rmway <- function(n,A,tests,alt.hx,odds.ratio.table,or,n.alt,K.alt){
 #' calc.marg(A.r)
 #' calc.marg(A.2)
 #' A-A.2 
-#' 
+#' @export
 reshape.table <- function(A,A.ori){
   if(missing(A.ori)){
     A.ori <- NULL

@@ -32,6 +32,5 @@ Generate althernative hypothesis tables in a direction with multipls K values
 }
 \examples{
 # Utility function for the authors
-
 }
 

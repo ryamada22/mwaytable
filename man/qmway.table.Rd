@@ -42,6 +42,5 @@ tests <- list(t1,t2,t3)
 n <- 1000
 p <- 0.05
 qmway.table(p,A,tests)
-
 }
 

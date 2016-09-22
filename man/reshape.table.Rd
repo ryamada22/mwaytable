@@ -41,6 +41,5 @@ calc.marg(A)
 calc.marg(A.r)
 calc.marg(A.2)
 A-A.2 
-
 }
 
