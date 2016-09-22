@@ -209,7 +209,9 @@ map2df <- function(A){
   E.A <- make.exp.table(A)
   W <- t(out$X.inv.sub) %*% diag(1/c(E.A)) %*% (out$X.inv.sub)
   eigen.W <- eigen(W)
-  diag(sqrt(eigen.W[[1]])) %*% t(eigen.W[[2]]) %*% out$X.sub
+  tmpdiag <- matrix(0,length(eigen.W[[1]]),length(eigen.W[[1]]))
+  diag(tmpdiag) <- sqrt(eigen.W[[1]])
+  tmpdiag %*% t(eigen.W[[2]]) %*% out$X.sub
 }
 #' Make a matrix that transfer back a vector in the df-dimensional space to a vector with number-of-cell of table elements
 #'
@@ -227,7 +229,9 @@ map2full <- function(A){
   E.A <- make.exp.table(A)
   W <- t(out$X.inv.sub) %*% diag(1/c(E.A)) %*% (out$X.inv.sub)
   eigen.W <- eigen(W)
-  out$X.inv.sub %*% eigen.W[[2]] %*% diag(1/sqrt(eigen.W[[1]]))
+  tmpdiag <- matrix(0,length(eigen.W[[1]]),length(eigen.W[[1]]))
+  diag(tmpdiag) <- 1/sqrt(eigen.W[[1]])
+  out$X.inv.sub %*% eigen.W[[2]] %*% tmpdiag
 }
 # A test vector in R-dimensional space is roted to df-dimensional vector with this matrix
 #' Make a matrix that transfer test vectors to the direction in the df-dimensional space
@@ -245,7 +249,9 @@ map2dfdir <- function(A){
   E.A <- make.exp.table(A)
   W <- t(out$X.inv.sub) %*% diag(1/c(E.A)) %*% (out$X.inv.sub)
   eigen.W <- eigen(W)
-  out$X.inv.sub %*% (eigen.W[[2]]) %*% diag(1/sqrt(eigen.W[[1]]))
+  tmpdiag <- matrix(0,length(eigen.W[[1]]),length(eigen.W[[1]]))
+  diag(tmpdiag) <- 1/sqrt(eigen.W[[1]])
+  out$X.inv.sub %*% (eigen.W[[2]]) %*% tmpdiag
 }
 ###
 # 3 matrices mentioned above are bundled.
@@ -266,9 +272,13 @@ map.matrix <- function(A){
   E.A <- make.exp.table(A)
   W <- t(out$X.inv.sub) %*% diag(1/c(E.A)) %*% (out$X.inv.sub)
   eigen.W <- eigen(W)
-  Full2DF <- diag(sqrt(eigen.W[[1]])) %*% t(eigen.W[[2]]) %*% out$X.sub
-  DF2full <- out$X.inv.sub %*% eigen.W[[2]] %*% diag(1/sqrt(eigen.W[[1]]))
-  NormalVec2DF <- out$X.inv.sub %*% (eigen.W[[2]]) %*% diag(1/sqrt(eigen.W[[1]]))
+  tmpdiag <- matrix(0,length(eigen.W[[1]]),length(eigen.W[[1]]))
+  diag(tmpdiag) <- sqrt(eigen.W[[1]])
+  Full2DF <- tmpdiag %*% t(eigen.W[[2]]) %*% out$X.sub
+  tmpdiag <- matrix(0,length(eigen.W[[1]]),length(eigen.W[[1]]))
+  diag(tmpdiag) <- 1/sqrt(eigen.W[[1]])
+  DF2full <- out$X.inv.sub %*% eigen.W[[2]] %*% tmpdiag
+  NormalVec2DF <- out$X.inv.sub %*% (eigen.W[[2]]) %*% tmpdiag
   return(list(Full2DF = Full2DF,DF2full = DF2full, NormalVec2DF = NormalVec2DF))
 }
 # multi-dimensional random vectors in normal distribution whose length is 1. 
