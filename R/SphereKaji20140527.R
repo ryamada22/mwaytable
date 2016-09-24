@@ -449,6 +449,71 @@ table.sphere <- function(A){
 }
 
 ###
+# Marginal counts-dependent matarials
+# Difference from table.shepre() is that this function specifies expected table as B.
+# Arguments
+#  A multi-way table (array), observed
+#  B multi-way table (array), expected
+# Values
+#  tables=list(data=A,expected=exp.table,diff=diff.table)
+##  A: input array, expected: expected array, diff: diff array
+#  r.vec = r.vec
+## Dimensions of array
+#  df=df
+## degree of freedom
+#  matrices = list(X=out$X,X.sub=out$X.sub,X.inv=out$X.inv,X.inv.sub=out$X.inv.sub)
+## matrices to rotate simplex between full and df dimensional spaces
+#  zero.vec=out$vector0
+## Index vector indicating zero elements after rotation to df space
+#  map.matrices=list(Full2DF=Full2DF,DF2full=DF2full,NormalVec2DF=NormalVec2DF,W=W)))
+## 
+###
+#'  Spherization of multiway table array
+#'
+#' @param A An array or matrix of multiway table
+#' @return tables A list of three tables: data :Input table A itself, expected : its expected table and diff: table of differecen between A and expected table
+#' @return r.vec A integer vector indicating numbers of levels of A
+#' @return df Degrees of freedom of A
+#' @return matrices A list of four matrices, X,X.sub,X.inv and X.inv.sub, which are output of make.X.vector0, rotating to/from number-of-cell dimension and df dimension with/without meaningless rows/columns
+#' @return zero.vec A vector indicating meaningful rows of rotations
+#' @return map.matrices A list of four matrices: Full2df is a matrix transforming a table array vector to df-dimensional point, DF2full is a matrix transforming df-dimensional point to a table vector, Normalvec2DF is a matrix transforming test table to df-dimensional vector and W is a key matrix to calculate other matrices 
+#' @examples
+#' r <- c(2,3,4)
+#' A <- array(1:prod(r),r)
+#' B <- A
+#' B <- array(rep(sum(A)/length(A),length(A)),r)
+#' t.sphere <- table.sphere.2(A,B)
+#' @export
+table.sphere.2 <- function (A,B) 
+{
+    n <- sum(A)
+    mg.cnt <- calc.marg(A)
+    exp.table <- B
+    diff.table <- A-B
+    chisq <- sum((A-B)^2/B)
+    r.vec <- dim(A)
+    out <- make.X.vector0(r.vec)
+    #df <- sum(out$vector0)
+    rotA <- out$X %*% c(A)
+    rotB <- out$X %*% c(B)
+    df <- which(abs(rotA-rotB) >10^(-15))
+    
+    W <- t(out$X.inv) %*% diag(1/c(exp.table)) %*% (out$X.inv)
+    eigen.W <- eigen(W)
+    tmp.diag <- tmp.diag.inv <- matrix(0, length(c(A)), length(c(A)))
+    diag(tmp.diag) <- sqrt(eigen.W[[1]])
+    diag(tmp.diag.inv) <- 1/sqrt(eigen.W[[1]])
+    Full2DF <- tmp.diag %*% t(eigen.W[[2]]) %*% out$X
+    DF2full <- out$X.inv %*% eigen.W[[2]] %*% tmp.diag.inv
+    NormalVec2DF <- out$X.inv %*% (eigen.W[[2]]) %*% tmp.diag.inv
+    return(list(tables = list(data = A, expected = exp.table, 
+        diff = diff.table), r.vec = r.vec, df = df, matrices = list(X = out$X, 
+        X.sub = out$X.sub, X.inv = out$X.inv, X.inv.sub = out$X.inv.sub), 
+        zero.vec = out$vector0, map.matrices = list(Full2DF = Full2DF, 
+            DF2full = DF2full, NormalVec2DF = NormalVec2DF, W = W)))
+}
+
+###
 # Arguments
 ## t.sphere: output of table.sphere()
 ## test.table: indicates alternative hypothesis direction in the shape of array
