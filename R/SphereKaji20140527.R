@@ -496,16 +496,16 @@ table.sphere.2 <- function (A,B)
     #df <- sum(out$vector0)
     rotA <- out$X %*% c(A)
     rotB <- out$X %*% c(B)
-    df <- which(abs(rotA-rotB) >10^(-15))
+    df.list <- 1:(prod(r.vec)-1)
     
-    W <- t(out$X.inv) %*% diag(1/c(exp.table)) %*% (out$X.inv)
+    W <- t(out$X.inv[,df.list]) %*% diag(1/c(exp.table)) %*% (out$X.inv[,df.list])
     eigen.W <- eigen(W)
-    tmp.diag <- tmp.diag.inv <- matrix(0, length(c(A)), length(c(A)))
+    tmp.diag <- tmp.diag.inv <- matrix(0, length(c(A))-1, length(c(A))-1)
     diag(tmp.diag) <- sqrt(eigen.W[[1]])
     diag(tmp.diag.inv) <- 1/sqrt(eigen.W[[1]])
-    Full2DF <- tmp.diag %*% t(eigen.W[[2]]) %*% out$X
-    DF2full <- out$X.inv %*% eigen.W[[2]] %*% tmp.diag.inv
-    NormalVec2DF <- out$X.inv %*% (eigen.W[[2]]) %*% tmp.diag.inv
+    Full2DF <- tmp.diag %*% t(eigen.W[[2]]) %*% out$X[df.list,]
+    DF2full <- out$X.inv[,df.list] %*% eigen.W[[2]] %*% tmp.diag.inv
+    NormalVec2DF <- out$X.inv[,df.list] %*% (eigen.W[[2]]) %*% tmp.diag.inv
     return(list(tables = list(data = A, expected = exp.table, 
         diff = diff.table), r.vec = r.vec, df = df, matrices = list(X = out$X, 
         X.sub = out$X.sub, X.inv = out$X.inv, X.inv.sub = out$X.inv.sub), 
